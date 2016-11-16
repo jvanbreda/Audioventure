@@ -53,10 +53,10 @@ public class CameraController : MonoBehaviour {
     private void Move() {
         // Gives the user the possibility to choose between touch or usb mouse control
         if((Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began) || Input.GetMouseButtonDown(0)) {
-            if (!GameObject.Find("Footsteps").GetComponent<AudioSource>().isPlaying)
+            if (!GameObject.Find("Footsteps").GetComponent<AudioSource>().isPlaying) {
                 GameObject.Find("Footsteps").GetComponent<AudioSource>().Play();
-            transform.position += new Vector3(transform.forward.x, 0, transform.forward.z) * MOVEMENT_SPEED;
-
+                transform.position += new Vector3(transform.forward.x, 0, transform.forward.z) * MOVEMENT_SPEED;
+            }
         }
     }
 
