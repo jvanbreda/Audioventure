@@ -88,7 +88,8 @@ public class CameraController : MonoBehaviour {
 
     private AudioModel CalculateAngleDifference(SoundObject source) {
         AudioModel model = new AudioModel();
-        model.angleDifference = Vector3.Angle(headingRay.direction, source.playerRay.direction);
+        model.angleDifference2D = Vector2.Angle(new Vector2(headingRay.direction.x, headingRay.direction.z), new Vector2(source.playerRay.direction.x, source.playerRay.direction.z));
+        model.angleDifference3D = Vector3.Angle(headingRay.direction, source.playerRay.direction);
         model.isAudioLocatedLeft = Vector3.Angle(rightRay.direction, source.playerRay.direction) > 90;
         model.distance = Vector3.Distance(transform.position, source.transform.position);
 
