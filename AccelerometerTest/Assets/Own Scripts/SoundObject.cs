@@ -54,7 +54,7 @@ namespace Assets {
 
         protected void UpdateVolume() {
             float correctedDistance = audioModel.distance / 300f;
-            float newVolume = 1 - (audioModel.angleDifference / 180f) - correctedDistance;
+            float newVolume = 1 - (audioModel.angleDifference3D / 180f) - correctedDistance;
             // Makes sure the volume is always a value between 0 and 1
             newVolume = Math.Max(0, newVolume);
             newVolume = Math.Min(1, newVolume);
@@ -62,7 +62,7 @@ namespace Assets {
         }
 
         protected void UpdatePan() {
-            float angleDifference = audioModel.angleDifference;
+            float angleDifference = audioModel.angleDifference2D;
             float newPan = panBoost * angleDifference / 180f;
             if (audioModel.isAudioLocatedLeft)
                 angleDifference *= -1;
