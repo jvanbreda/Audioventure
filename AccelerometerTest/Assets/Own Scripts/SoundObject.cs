@@ -23,6 +23,12 @@ namespace Assets {
         [SerializeField]
         private CameraController cc;
 
+        [Range(-1f, 1f)]
+        public float Panslider;
+        
+        [Range(0f, 1f)]
+        public float Volumeslider;
+
 
         void Start() {
             audioSource = GetComponentInChildren<AudioSource>();
@@ -57,7 +63,7 @@ namespace Assets {
         }
 
         protected void UpdateVolume() {
-            float correctedDistance = Math.Min(audioModel.distance / 110f, 0.2f);
+            float correctedDistance = Math.Min(audioModel.distance / 120f, 0.2f);
             float correctedVolume = Math.Min(audioModel.angleDifference3D / 180f, 0.6f);
             float newVolume = 1 - correctedVolume - correctedDistance;
             // Makes sure the volume is always a value between 0 and 1
