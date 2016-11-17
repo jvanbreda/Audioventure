@@ -46,7 +46,8 @@ namespace Assets {
 
         public void UpdateAudioSource() {
             if (cc.counter == index) {
-                if (!audioSource.isPlaying)
+                audioSource.enabled = true;
+                if (!audioSource.isPlaying && !GameObject.Find("EndSound").GetComponent<AudioSource>().isPlaying)
                     audioSource.Play();
                 UpdateVolume();
                 UpdatePan();
@@ -88,6 +89,11 @@ namespace Assets {
                 audioSource.enabled = false;
                 cc.counter++;
             }
+
+            if (cc.counter > 4) {
+                GameObject.Find("EndSound").GetComponent<AudioSource>().Play();
+                cc.counter = 0;
+            }    
         }
 
         // set audio 
