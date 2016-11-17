@@ -13,6 +13,7 @@ namespace Assets {
 
         private const float volumeBoost = 0.5f;
         private const float panBoost = 1.5f;
+        private const float reverbBoost = 1.5f;
 
         private AudioSource audioSource;
         [SerializeField]
@@ -21,10 +22,11 @@ namespace Assets {
         private int index;
         [SerializeField]
         private CameraController cc;
-        
+
 
         void Start() {
             audioSource = GetComponentInChildren<AudioSource>();
+
         }
 
         void Update() {
@@ -48,13 +50,15 @@ namespace Assets {
                     audioSource.Play();
                 UpdateVolume();
                 UpdatePan();
+                UpdateReverb();
+
             }
-            
         }
 
         protected void UpdateVolume() {
-            float correctedDistance = audioModel.distance / 300f;
-            float newVolume = 1 - (audioModel.angleDifference3D / 180f) - correctedDistance;
+            float correctedDistance = Math.Min(audioModel.distance / 110f, 0.2f);
+            float correctedVolume = Math.Min(audioModel.angleDifference3D / 180f, 0.6f);
+            float newVolume = 1 - correctedVolume - correctedDistance;
             // Makes sure the volume is always a value between 0 and 1
             newVolume = Math.Max(0, newVolume);
             newVolume = Math.Min(1, newVolume);
@@ -66,10 +70,16 @@ namespace Assets {
             float newPan = panBoost * angleDifference / 180f;
             if (audioModel.isAudioLocatedLeft)
                 angleDifference *= -1;
-            
+
             // Math.Sin keeps the pan within the -1 to 1 range
-            newPan = (float) Math.Sin(angleDifference * Math.PI/180f);
+            newPan = (float)Math.Sin(angleDifference * Math.PI / 180f);
             SetPan(newPan);
+        }
+
+        private void UpdateReverb() {
+            float angleDifference = audioModel.angleDifference2D;
+            float newReverbZoneMix = Math.Min(1.05f, reverbBoost * (angleDifference / 180f));
+            SetReverbZoneMix(newReverbZoneMix);
         }
 
         private void CheckCollision() {
@@ -88,6 +98,10 @@ namespace Assets {
         // set panning 
         public void SetPan(float panStereo) {
             audioSource.panStereo = panStereo;
+        }
+
+        private void SetReverbZoneMix(float reverbZoneMix) {
+            audioSource.reverbZoneMix = reverbZoneMix;
         }
     }
 }
