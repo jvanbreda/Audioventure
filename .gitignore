@@ -31,3 +31,4 @@ sysinfo.txt
 *.unitypackage
 AccelerometerTest/Temp/
 AccelerometerTest/Library/shadercompiler-UnityShaderCompiler.exe0.log
+AccelerometerTest/Library/metadata/
