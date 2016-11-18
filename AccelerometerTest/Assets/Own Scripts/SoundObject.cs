@@ -53,7 +53,7 @@ namespace Assets {
         public void UpdateAudioSource() {
             if (cc.counter == index) {
                 audioSource.enabled = true;
-                if (!audioSource.isPlaying && !GameObject.Find("EndSound").GetComponent<AudioSource>().isPlaying)
+                if (!audioSource.isPlaying && !GameObject.Find("EndSound").GetComponent<AudioSource>().isPlaying && !GameObject.Find("PickupSound").GetComponent<AudioSource>().isPlaying)
                     audioSource.Play();
                 UpdateVolume();
                 UpdatePan();
@@ -91,7 +91,7 @@ namespace Assets {
 
         private void CheckCollision() {
             if (audioModel.distance < 5 && cc.counter == index) {
-                GameObject.Find("CoinSound").GetComponent<AudioSource>().Play();
+                GameObject.Find("PickupSound").GetComponent<AudioSource>().Play();
                 audioSource.enabled = false;
                 cc.counter++;
             }
