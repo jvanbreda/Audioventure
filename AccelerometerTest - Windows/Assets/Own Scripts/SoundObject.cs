@@ -11,9 +11,11 @@ namespace Assets {
         public Ray playerRay { get; private set; }
         public AudioModel audioModel = new AudioModel();
 
-        private const float volumeBoost = 0.5f;
+        private const float volumeBoost = 1.5f;
         private const float panBoost = 1.5f;
         private const float reverbBoost = 1.5f;
+
+        private const float MAX_DISTANCE = 100f;
 
         private AudioSource audioSource;
         [SerializeField]
@@ -22,12 +24,6 @@ namespace Assets {
         private int index;
         [SerializeField]
         private CameraController cc;
-
-        [Range(-1f, 1f)]
-        public float Panslider;
-        
-        [Range(0f, 1f)]
-        public float Volumeslider;
 
 
         void Start() {
@@ -53,8 +49,8 @@ namespace Assets {
         public void UpdateAudioSource() {
             if (cc.counter == index) {
                 audioSource.enabled = true;
-                if (!audioSource.isPlaying && !GameObject.Find("EndSound").GetComponent<AudioSource>().isPlaying)
-                    audioSource.Play();
+                if (!audioSource.isPlaying && !GameObject.Find("EndSound").GetComponent<AudioSource>().isPlaying && !GameObject.Find("PickupSound").GetComponent<AudioSource>().isPlaying)
+                    audioSource.Play(); 
                 UpdateVolume();
                 UpdatePan();
                 UpdateReverb();
@@ -63,9 +59,11 @@ namespace Assets {
         }
 
         protected void UpdateVolume() {
-            float correctedDistance = Math.Min(audioModel.distance / 120f, 0.2f);
-            float correctedVolume = Math.Min(audioModel.angleDifference3D / 180f, 0.6f);
-            float newVolume = 1 - correctedVolume - correctedDistance;
+            //float correctedDistance = (float) Math.Min(Math.Log(audioModel.distance - 4) / (Math.Log(MAX_DISTANCE - 4)), 1f);
+            float correctedDistance = (float) Math.Min(Math.Sin((Math.PI * audioModel.distance) / (MAX_DISTANCE * 2)), 0.7f);
+            Debug.Log(correctedDistance);
+            float correctedVolume = Math.Min(audioModel.angleDifference3D / 360f, 0.5f);
+            float newVolume = (1 - correctedVolume - correctedDistance);
             // Makes sure the volume is always a value between 0 and 1
             newVolume = Math.Max(0, newVolume);
             newVolume = Math.Min(1, newVolume);
@@ -74,12 +72,13 @@ namespace Assets {
 
         protected void UpdatePan() {
             float angleDifference = audioModel.angleDifference2D;
-            float newPan = panBoost * angleDifference / 180f;
             if (audioModel.isAudioLocatedLeft)
                 angleDifference *= -1;
 
             // Math.Sin keeps the pan within the -1 to 1 range
-            newPan = (float)Math.Sin(angleDifference * Math.PI / 180f);
+            float newPan = (float) Math.Sin(angleDifference * Math.PI / 180f) * panBoost;
+            newPan = Math.Max(-1, newPan);
+            newPan = Math.Min(1, newPan);
             SetPan(newPan);
         }
 
@@ -91,7 +90,7 @@ namespace Assets {
 
         private void CheckCollision() {
             if (audioModel.distance < 5 && cc.counter == index) {
-                GameObject.Find("CoinSound").GetComponent<AudioSource>().Play();
+                GameObject.Find("PickupSound").GetComponent<AudioSource>().Play();
                 audioSource.enabled = false;
                 cc.counter++;
             }
