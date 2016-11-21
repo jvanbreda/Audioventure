@@ -27,9 +27,9 @@ public class CameraController : MonoBehaviour {
         counter = 0;
         // Used for 'calibratrion': this makes sure that the camera behaves 
         // exactly the same as the phone the user is holding
-        camParent = new GameObject("camParent");
-        camParent.transform.Rotate(Vector3.right, 90);
-        transform.parent = camParent.transform;
+        //camParent = new GameObject("camParent");
+        //camParent.transform.Rotate(Vector3.right, 90);
+        //transform.parent = camParent.transform;
 
         // Gyroscope must be manually enabled to be used and the location functionality must
         // be used

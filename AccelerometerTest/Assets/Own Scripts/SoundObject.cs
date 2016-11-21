@@ -15,7 +15,7 @@ namespace Assets {
         private const float panBoost = 1.5f;
         private const float reverbBoost = 1.5f;
 
-        private const float MAX_DISTANCE = 100f;
+        private const float MAX_DISTANCE = 200f;
 
         private AudioSource audioSource;
         [SerializeField]
