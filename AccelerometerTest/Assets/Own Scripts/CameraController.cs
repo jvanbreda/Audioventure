@@ -4,7 +4,8 @@ using System;
 using Assets;
 using Assets.Own_Scripts;
 
-public class CameraController : MonoBehaviour {
+public class CameraController : MonoBehaviour
+{
 
     private GameObject camParent;
     private int currentCameraAngle;
@@ -20,10 +21,11 @@ public class CameraController : MonoBehaviour {
     public SoundObject[] soundObjectArray;
 
     public int counter;
-    
+
 
     // Use this for initialization
-    void Start() {
+    void Start()
+    {
         counter = 0;
         // Used for 'calibratrion': this makes sure that the camera behaves 
         // exactly the same as the phone the user is holding
@@ -43,34 +45,40 @@ public class CameraController : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update() {
+    void Update()
+    {
         UpdateHeading();
         Move();
         SendRays();
         UpdateAudioSources();
     }
 
-    private void Move() {
+    private void Move()
+    {
         // Gives the user the possibility to choose between touch or usb mouse control
-        if((Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began) || Input.GetMouseButtonDown(0)) {
-            if (!GameObject.Find("Footsteps").GetComponent<AudioSource>().isPlaying) {
+        if ((Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began) || Input.GetMouseButtonDown(0))
+        {
+            if (!GameObject.Find("Footsteps").GetComponent<AudioSource>().isPlaying)
+            {
                 GameObject.Find("Footsteps").GetComponent<AudioSource>().Play();
                 transform.position += new Vector3(transform.forward.x, 0, transform.forward.z) * MOVEMENT_SPEED;
             }
         }
     }
 
-    private void UpdateHeading() {
+    private void UpdateHeading()
+    {
         heading = Input.gyro.attitude;
         transform.localRotation = Quaternion.Lerp(transform.localRotation, new Quaternion(heading.x * CAMERA_SPEED, heading.y * CAMERA_SPEED, -heading.z * CAMERA_SPEED, -heading.w * CAMERA_SPEED), Time.deltaTime);
-        currentCameraAngle = 360 - (int) transform.eulerAngles.y;
+        currentCameraAngle = 360 - (int)transform.eulerAngles.y;
 
         //GameObject.Find("Compass").transform.localRotation = Quaternion.Euler(new Vector3(90, currentCameraAngle, -90));
 
         //GameObject.Find("Degrees text").GetComponent<TextMesh>().text = currentCameraAngle.ToString();
     }
 
-    private void SendRays() {
+    private void SendRays()
+    {
         headingRay = new Ray(transform.position, transform.forward);
         Physics.Raycast(headingRay, 3);
         Debug.DrawRay(transform.position, transform.forward, Color.blue);
@@ -80,13 +88,16 @@ public class CameraController : MonoBehaviour {
         Debug.DrawRay(transform.position, transform.right, Color.blue);
     }
 
-    private void UpdateAudioSources() {
-        foreach (SoundObject source in soundObjectArray) {
+    private void UpdateAudioSources()
+    {
+        foreach (SoundObject source in soundObjectArray)
+        {
             source.audioModel = CalculateAngleDifference(source);
         }
     }
 
-    private AudioModel CalculateAngleDifference(SoundObject source) {
+    private AudioModel CalculateAngleDifference(SoundObject source)
+    {
         AudioModel model = new AudioModel();
         model.angleDifference2D = Vector2.Angle(new Vector2(headingRay.direction.x, headingRay.direction.z), new Vector2(source.playerRay.direction.x, source.playerRay.direction.z));
         model.angleDifference3D = Vector3.Angle(headingRay.direction, source.playerRay.direction);
