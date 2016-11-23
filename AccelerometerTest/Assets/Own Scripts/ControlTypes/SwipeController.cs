@@ -8,7 +8,7 @@ using UnityEngine;
 namespace Assets.Own_Scripts {
     class SwipeController : AbstractController {
 
-        public SwipeController() {
+        void Start() {
             gameController = GameObject.Find("GameController").GetComponent<GameController>();
         }
 

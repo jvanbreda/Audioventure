@@ -8,7 +8,7 @@ using UnityEngine;
 namespace Assets.Own_Scripts {
     class HeadMountedController : AbstractController {
 
-        public HeadMountedController() {
+        void Start() {
             gameController = GameObject.Find("GameController").GetComponent<GameController>();
         }
 
