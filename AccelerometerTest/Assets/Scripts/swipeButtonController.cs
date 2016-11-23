@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System;
 using UnityEngine.SceneManagement;
+using Assets.Own_Scripts;
 
 public class swipeButtonController : MonoBehaviour, IPointerDownHandler {
 
@@ -15,5 +16,8 @@ public class swipeButtonController : MonoBehaviour, IPointerDownHandler {
         Debug.Log("Test");
 
         swipeButton.GetComponent<Image>().color = Color.blue;
+
+        GameController.controlMethod = ControlMethod.Swipe;
+
     }
 }
