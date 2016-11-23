@@ -12,10 +12,6 @@ namespace Assets.Own_Scripts {
             gameController = GameObject.Find("GameController").GetComponent<GameController>();
         }
 
-        void Start() {
-
-        }
-
         public override void Move() {
             if ((Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)) {
                 if (!GameObject.Find("Footsteps").GetComponent<AudioSource>().isPlaying) {

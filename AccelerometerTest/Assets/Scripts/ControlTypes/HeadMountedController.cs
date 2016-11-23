@@ -8,6 +8,9 @@ using UnityEngine;
 namespace Assets.Own_Scripts {
     class HeadMountedController : AbstractController {
 
+        private Quaternion heading;
+        private int currentCameraAngle;
+
         public HeadMountedController() {
             gameController = GameObject.Find("GameController").GetComponent<GameController>();
         }
@@ -22,7 +25,9 @@ namespace Assets.Own_Scripts {
         }
 
         public override void UpdateHeading() {
-
+            heading = Input.gyro.attitude;
+            gameController.camera.transform.localRotation = Quaternion.Lerp(gameController.camera.transform.localRotation, new Quaternion(heading.x * GameController.CAMERA_SPEED, heading.y * GameController.CAMERA_SPEED, -heading.z * GameController.CAMERA_SPEED, -heading.w * GameController.CAMERA_SPEED), Time.deltaTime);
+            currentCameraAngle = 360 - (int)gameController.camera.transform.eulerAngles.y;
         }
     }
 }
