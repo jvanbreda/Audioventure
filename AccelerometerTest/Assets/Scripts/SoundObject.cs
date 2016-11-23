@@ -5,12 +5,12 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-namespace Assets
-{
-    public class SoundObject : MonoBehaviour
-    {
+namespace Assets {
+    public class SoundObject : MonoBehaviour {
 
-        public Ray playerRay { get; private set; }
+        [SerializeField]
+        private int index;
+
         public AudioModel audioModel = new AudioModel();
 
         private const float volumeBoost = 1.5f;
@@ -19,58 +19,36 @@ namespace Assets
 
         private const float MAX_DISTANCE = 500f;
 
-        private AudioSource audioSource;
-        [SerializeField]
-        private Camera camera;
-        [SerializeField]
-        private int index;
-        [SerializeField]
-        private CameraController cc;
+        public AudioSource audioSource;
+
+        private GameController gameController;
 
 
-        void Start()
-        {
+        void Start() {
             audioSource = GetComponentInChildren<AudioSource>();
-
+            audioSource.enabled = false;
+            gameController = GameObject.Find("GameController").GetComponent<GameController>();
         }
 
-        void Update()
-        {
-            SendRayFromPlayer();
+        void Update() {
             UpdateAudioSource();
         }
 
-        void LateUpdate()
-        {
+        void LateUpdate() {
             CheckCollision();
         }
 
-        private void SendRayFromPlayer()
-        {
-            playerRay = new Ray(camera.transform.position, transform.position - camera.transform.position);
-            Physics.Raycast(playerRay, Vector3.Distance(transform.position, camera.transform.position));
-            Debug.DrawRay(camera.transform.position, transform.position - camera.transform.position, Color.red);
+        public void UpdateAudioSource() {
+            if (!audioSource.isPlaying && !GameObject.Find("EndSound").GetComponent<AudioSource>().isPlaying && !GameObject.Find("PickupSound").GetComponent<AudioSource>().isPlaying)
+                audioSource.Play();
+            UpdateVolume();
+            UpdatePan();
+            UpdateReverb();
         }
 
-        public void UpdateAudioSource()
-        {
-            if (cc.counter == index)
-            {
-                audioSource.enabled = true;
-                if (!audioSource.isPlaying && !GameObject.Find("EndSound").GetComponent<AudioSource>().isPlaying && !GameObject.Find("PickupSound").GetComponent<AudioSource>().isPlaying)
-                    audioSource.Play();
-                UpdateVolume();
-                UpdatePan();
-                UpdateReverb();
-
-            }
-        }
-
-        protected void UpdateVolume()
-        {
+        protected void UpdateVolume() {
             //float correctedDistance = (float) Math.Min(Math.Log(audioModel.distance - 4) / (Math.Log(MAX_DISTANCE - 4)), 1f);
             float correctedDistance = (float)Math.Min(Math.Sin((Math.PI * audioModel.distance) / (MAX_DISTANCE * 2)), 0.6f);
-            Debug.Log(correctedDistance);
             float correctedVolume = Math.Min(audioModel.angleDifference3D / 360f, 0.5f);
             float newVolume = (1 - correctedVolume - correctedDistance);
             // Makes sure the volume is always a value between 0 and 1
@@ -79,8 +57,7 @@ namespace Assets
             SetVolume(newVolume);
         }
 
-        protected void UpdatePan()
-        {
+        protected void UpdatePan() {
             float angleDifference = audioModel.angleDifference2D;
             if (audioModel.isAudioLocatedLeft)
                 angleDifference *= -1;
@@ -92,43 +69,36 @@ namespace Assets
             SetPan(newPan);
         }
 
-        private void UpdateReverb()
-        {
+        private void UpdateReverb() {
             float angleDifference = audioModel.angleDifference2D;
             float newReverbZoneMix = Math.Min(1.05f, reverbBoost * (angleDifference / 180f));
             SetReverbZoneMix(newReverbZoneMix);
         }
 
-        private void CheckCollision()
-        {
-            if (audioModel.distance < 5 && cc.counter == index)
-            {
+        private void CheckCollision() {
+            if (audioModel.distance < 5 && gameController.counter == index) {
                 GameObject.Find("PickupSound").GetComponent<AudioSource>().Play();
                 audioSource.enabled = false;
-                cc.counter++;
+                gameController.counter++;
             }
 
-            if (cc.counter > 4)
-            {
+            if (gameController.counter > 4) {
                 GameObject.Find("EndSound").GetComponent<AudioSource>().Play();
-                cc.counter = 0;
+                gameController.counter = 0;
             }
         }
 
         // set audio 
-        public void SetVolume(float volume)
-        {
+        public void SetVolume(float volume) {
             audioSource.volume = volume;
         }
 
         // set panning 
-        public void SetPan(float panStereo)
-        {
+        public void SetPan(float panStereo) {
             audioSource.panStereo = panStereo;
         }
 
-        private void SetReverbZoneMix(float reverbZoneMix)
-        {
+        private void SetReverbZoneMix(float reverbZoneMix) {
             audioSource.reverbZoneMix = reverbZoneMix;
         }
     }
