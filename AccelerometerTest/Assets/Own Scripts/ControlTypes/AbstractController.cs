@@ -5,7 +5,7 @@ using System.Text;
 using UnityEngine;
 
 namespace Assets.Own_Scripts.ControlTypes {
-    public abstract class AbstractController : MonoBehaviour {
+    public abstract class AbstractController : ScriptableObject {
 
         protected GameController gameController;
 

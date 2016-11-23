@@ -39,7 +39,7 @@ namespace Assets {
         }
 
         public void UpdateAudioSource() {
-            if (!audioSource.isPlaying && !GameObject.Find("EndSound").GetComponent<AudioSource>().isPlaying && !GameObject.Find("PickupSound").GetComponent<AudioSource>().isPlaying)
+            if (!audioSource.isPlaying && audioSource.enabled && !GameObject.Find("EndSound").GetComponent<AudioSource>().isPlaying && !GameObject.Find("PickupSound").GetComponent<AudioSource>().isPlaying)
                 audioSource.Play();
             UpdateVolume();
             UpdatePan();

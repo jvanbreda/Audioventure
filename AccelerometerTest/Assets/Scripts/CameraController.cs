@@ -25,10 +25,10 @@ public class CameraController : MonoBehaviour {
 
         switch (controlMethod) {
             case ControlMethod.Swipe:
-                controller = new SwipeController();
+                controller = ScriptableObject.CreateInstance<SwipeController>();
                 break;
             case ControlMethod.HeadMounted:
-                controller = new HeadMountedController();
+                controller = ScriptableObject.CreateInstance<HeadMountedController>();
                 break;
         }
     }
