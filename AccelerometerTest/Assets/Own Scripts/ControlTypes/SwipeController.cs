@@ -8,8 +8,12 @@ using UnityEngine;
 namespace Assets.Own_Scripts {
     class SwipeController : AbstractController {
 
-        void Start() {
+        public SwipeController() {
             gameController = GameObject.Find("GameController").GetComponent<GameController>();
+        }
+
+        void Start() {
+
         }
 
         public override void Move() {

@@ -21,14 +21,14 @@ public class CameraController : MonoBehaviour {
         camParent.transform.Rotate(Vector3.right, 90);
         transform.parent = camParent.transform;
 
-        controlMethod = ControlMethod.Swipe;
+        controlMethod = ControlMethod.HeadMounted;
 
         switch (controlMethod) {
             case ControlMethod.Swipe:
-                controller = ScriptableObject.CreateInstance<SwipeController>();
+                controller = new SwipeController();
                 break;
             case ControlMethod.HeadMounted:
-                controller = ScriptableObject.CreateInstance<HeadMountedController>();
+                controller = new HeadMountedController();
                 break;
         }
     }
