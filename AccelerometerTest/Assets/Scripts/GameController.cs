@@ -1,15 +1,17 @@
-﻿using System;
+﻿using Assets.Own_Scripts.ControlTypes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Assets.Own_Scripts {
     public class GameController : MonoBehaviour {
 
-        [SerializeField]
+        //[SerializeField]
         public SoundObject[] soundObjects;
-        [SerializeField]
+        //[SerializeField]
         public Camera camera;
 
         public const float MOVING_SPEED = 10f;
@@ -22,7 +24,11 @@ namespace Assets.Own_Scripts {
 
         public int counter;
 
+        public static ControlMethod controlMethod;
+
         void Start() {
+            DontDestroyOnLoad(GameObject.Find("GameController"));
+            
             counter = 0;
             playerRays = new Ray[5];
 
@@ -39,12 +45,22 @@ namespace Assets.Own_Scripts {
         }
 
         void Update() {
-            ShootRays();
+            if (SceneManager.GetActiveScene().name == "AccelerometerTest")
+            {
+                camera = GameObject.Find("camParent").GetComponentInChildren<Camera>();
+                ShootRays();
+
+                GameObject.Find("SwipeCanvas").GetComponent<Canvas>().enabled = (controlMethod == ControlMethod.Swipe);
+            }
+            
         }
 
         void LateUpdate() {
-            UpdateCurrentAudioSource();
-            UpdateAudioModel();
+            if (SceneManager.GetActiveScene().name == "AccelerometerTest")
+            {
+                UpdateCurrentAudioSource();
+                UpdateAudioModel();
+            }
         }
 
         private void ShootRays() {

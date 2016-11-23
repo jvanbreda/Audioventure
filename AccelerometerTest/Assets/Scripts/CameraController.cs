@@ -21,9 +21,7 @@ public class CameraController : MonoBehaviour {
         camParent.transform.Rotate(Vector3.right, 90);
         transform.parent = camParent.transform;
 
-        controlMethod = ControlMethod.HeadMounted;
-
-        switch (controlMethod) {
+        switch (GameController.controlMethod) {
             case ControlMethod.Swipe:
                 controller = new SwipeController();
                 break;
@@ -35,6 +33,7 @@ public class CameraController : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
+        Debug.Log(GameController.controlMethod);
         controller.Move();
         controller.UpdateHeading();
     }

@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Assets.Own_Scripts;
 
 public class HeadmountedButtonController : MonoBehaviour, IPointerDownHandler {
 
@@ -13,5 +14,10 @@ public class HeadmountedButtonController : MonoBehaviour, IPointerDownHandler {
         Debug.Log("Test");
 
         headmountedButton.GetComponent<Image>().color = Color.blue;
+
+        GameController.controlMethod = ControlMethod.HeadMounted;
+        
+        
+
     }
 }

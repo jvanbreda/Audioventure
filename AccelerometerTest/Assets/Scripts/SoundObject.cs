@@ -28,6 +28,7 @@ namespace Assets {
             audioSource = GetComponentInChildren<AudioSource>();
             audioSource.enabled = false;
             gameController = GameObject.Find("GameController").GetComponent<GameController>();
+            gameController.soundObjects[index] = this;
         }
 
         void Update() {
