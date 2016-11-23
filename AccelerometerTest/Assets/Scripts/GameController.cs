@@ -32,15 +32,7 @@ namespace Assets.Own_Scripts {
             counter = 0;
             playerRays = new Ray[5];
 
-            // Gyroscope must be manually enabled to be used and the location functionality must
-            // be used
-            Input.gyro.enabled = true;
-            Input.location.Start();
-
-            // Some 'standard' configuration: the back button can now be used to close the app,
-            // and the smartphone will not go to sleep during the usage of the app.
-            Input.backButtonLeavesApp = true;
-            Screen.sleepTimeout = SleepTimeout.NeverSleep;
+            
 
         }
 

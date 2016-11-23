@@ -10,7 +10,6 @@ public class CameraController : MonoBehaviour {
     private GameObject camParent;
     private Quaternion heading;
 
-    private ControlMethod controlMethod;
     private AbstractController controller;
 
     // Use this for initialization
@@ -32,8 +31,7 @@ public class CameraController : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update() {
-        Debug.Log(GameController.controlMethod);
+    void Update() { 
         controller.Move();
         controller.UpdateHeading();
     }
