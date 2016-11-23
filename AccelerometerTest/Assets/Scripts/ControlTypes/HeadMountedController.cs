@@ -24,6 +24,11 @@ namespace Assets.Own_Scripts {
             Screen.sleepTimeout = SleepTimeout.NeverSleep;
         }
 
+        void Update() {
+            Move();
+            UpdateHeading();
+        }
+
         public override void Move() {
             if (Input.GetMouseButtonDown(0)) {
                 if (!GameObject.Find("Footsteps").GetComponent<AudioSource>().isPlaying) {

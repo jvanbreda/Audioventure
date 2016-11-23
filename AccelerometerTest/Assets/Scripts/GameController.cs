@@ -16,6 +16,7 @@ namespace Assets.Own_Scripts {
 
         public const float MOVING_SPEED = 10f;
         public const float CAMERA_SPEED = 10f;
+        private const int RAY_LENGTH = 3;
 
         public Ray headingRay;
         public Ray rightRay;
@@ -25,15 +26,13 @@ namespace Assets.Own_Scripts {
         public int counter;
 
         public static ControlMethod controlMethod;
+        public static AbstractController controller;
 
         void Start() {
             DontDestroyOnLoad(GameObject.Find("GameController"));
             
             counter = 0;
             playerRays = new Ray[5];
-
-            
-
         }
 
         void Update() {
@@ -41,7 +40,6 @@ namespace Assets.Own_Scripts {
             {
                 camera = GameObject.Find("camParent").GetComponentInChildren<Camera>();
                 ShootRays();
-
                 GameObject.Find("SwipeCanvas").GetComponent<Canvas>().enabled = (controlMethod == ControlMethod.Swipe);
             }
             
@@ -62,11 +60,11 @@ namespace Assets.Own_Scripts {
 
         private void ShootHeadingRays() {
             headingRay = new Ray(camera.transform.position, camera.transform.forward);
-            Physics.Raycast(headingRay, 3);
+            Physics.Raycast(headingRay, RAY_LENGTH);
             Debug.DrawRay(camera.transform.position, camera.transform.forward, Color.blue);
 
             rightRay = new Ray(camera.transform.position, camera.transform.right);
-            Physics.Raycast(rightRay, 3);
+            Physics.Raycast(rightRay, RAY_LENGTH);
             Debug.DrawRay(camera.transform.position, camera.transform.right, Color.blue);
 
         }
