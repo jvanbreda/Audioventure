@@ -8,9 +8,6 @@ using UnityEngine;
 namespace Assets.Own_Scripts {
     class HeadMountedController : AbstractController {
 
-        private Quaternion heading;
-        private int currentCameraAngle;
-
         public HeadMountedController() {
             gameController = GameObject.Find("GameController").GetComponent<GameController>();
             // Gyroscope must be manually enabled to be used and the location functionality must
@@ -24,24 +21,23 @@ namespace Assets.Own_Scripts {
             Screen.sleepTimeout = SleepTimeout.NeverSleep;
         }
 
-        void Update() {
-            Move();
-            UpdateHeading();
-        }
-
         public override void Move() {
             if (Input.GetMouseButtonDown(0)) {
                 if (!GameObject.Find("Footsteps").GetComponent<AudioSource>().isPlaying) {
                     GameObject.Find("Footsteps").GetComponent<AudioSource>().Play();
-                    gameController.camera.transform.position += new Vector3(gameController.camera.transform.forward.x, 0, gameController.camera.transform.forward.z) * GameController.MOVING_SPEED;
+                    GameController.headingController.transform.position += new Vector3(GameController.headingController.transform.forward.x, 0, GameController.headingController.transform.forward.z) * GameController.MOVING_SPEED;
                 }
             }
         }
 
-        public override void UpdateHeading() {
-            heading = Input.gyro.attitude;
-            gameController.camera.transform.localRotation = Quaternion.Lerp(gameController.camera.transform.localRotation, new Quaternion(heading.x * GameController.CAMERA_SPEED, heading.y * GameController.CAMERA_SPEED, -heading.z * GameController.CAMERA_SPEED, -heading.w * GameController.CAMERA_SPEED), Time.deltaTime);
-            currentCameraAngle = 360 - (int)gameController.camera.transform.eulerAngles.y;
+        public override void UpdateHeading(string direction) {
+            heading = new Vector3(orientation.x, orientation.y, orientation.z);
+        }
+
+        public override void UpdateOrientation() {
+            orientation = Input.gyro.attitude;
+            GameController.camera.transform.localRotation = Quaternion.Lerp(GameController.camera.transform.localRotation, new Quaternion(orientation.x * GameController.CAMERA_SPEED, orientation.y * GameController.CAMERA_SPEED, -orientation.z * GameController.CAMERA_SPEED, -orientation.w * GameController.CAMERA_SPEED), Time.deltaTime);
+            currentCameraAngle = 360 - (int)GameController.camera.transform.eulerAngles.y;
         }
     }
 }

@@ -7,26 +7,13 @@ using Assets.Own_Scripts.ControlTypes;
 
 public class CameraController : MonoBehaviour {
 
-    private GameObject camParent;
-    private Quaternion heading;
-
-    
+    private GameObject camParent;    
 
     // Use this for initialization
     void Start() {
-        // Used for 'calibratrion': this makes sure that the camera behaves 
-        // exactly the same as the phone the user is holding
-        camParent = new GameObject("camParent");
-        camParent.transform.Rotate(Vector3.right, 90);
-        transform.parent = camParent.transform;
+        GameController.camera = GameObject.Find("HeadingController").GetComponentInChildren<Camera>();
+        GameController.headingController = GameObject.Find("HeadingController");
+        GameObject.Find("HeadingController").transform.Rotate(Vector3.right, 90);
 
-        switch (GameController.controlMethod) {
-            case ControlMethod.Swipe:
-                GameController.controller = new SwipeController();
-                break;
-            case ControlMethod.HeadMounted:
-                GameController.controller = new HeadMountedController();
-                break;
-        }
     }
 }
