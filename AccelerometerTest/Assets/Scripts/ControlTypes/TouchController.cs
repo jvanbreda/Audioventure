@@ -6,9 +6,9 @@ using System.Text;
 using UnityEngine;
 
 namespace Assets.Own_Scripts {
-    class SwipeController : AbstractController {
+    class TouchController : AbstractController {
 
-        public SwipeController() {
+        public TouchController() {
             gameController = GameObject.Find("GameController").GetComponent<GameController>();
 
             // Gyroscope must be manually enabled to be used and the location functionality must

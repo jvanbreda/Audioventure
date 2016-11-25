@@ -39,8 +39,9 @@ namespace Assets.Own_Scripts {
             if (SceneManager.GetActiveScene().name == "AccelerometerTest")
             {
                 ShootRays();
-                GameObject.Find("SwipeCanvas").GetComponent<Canvas>().enabled = (controller.GetType().Equals(typeof(SwipeController)));
+                GameObject.Find("TouchCanvas").GetComponent<Canvas>().enabled = (controller.GetType().Equals(typeof(TouchController)));
                 controller.UpdateOrientation();
+                controller.Move();
             }
             
         }

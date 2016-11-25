@@ -4,16 +4,16 @@ using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using Assets.Own_Scripts;
 
-public class swipeButtonController : MonoBehaviour, IPointerDownHandler {
+public class TouchButtonController : MonoBehaviour, IPointerDownHandler {
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        Button swipeButton = GameObject.Find("SwipeButton").GetComponent<Button>();
+        Button TouchButton = GameObject.Find("TouchButton").GetComponent<Button>();
         Debug.Log("Test");
 
-        swipeButton.GetComponent<Image>().color = Color.blue;
+        TouchButton.GetComponent<Image>().color = Color.blue;
 
-        GameController.controller = new SwipeController();
+        GameController.controller = new TouchController();
         SceneManager.LoadScene("AccelerometerTest");
 
 
