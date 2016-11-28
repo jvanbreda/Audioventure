@@ -8,6 +8,8 @@ using UnityEngine;
 namespace Assets.Own_Scripts {
     class HeadMountedController : AbstractController {
 
+        private int previousCameraAngle;
+
         public HeadMountedController() {
             gameController = GameObject.Find("GameController").GetComponent<GameController>();
             // Gyroscope must be manually enabled to be used and the location functionality must
@@ -31,13 +33,18 @@ namespace Assets.Own_Scripts {
         }
 
         public override void UpdateHeading(string direction) {
-            heading = new Vector3(orientation.x, orientation.y, orientation.z);
+            int angleDifference = currentCameraAngle - previousCameraAngle;
+            if (angleDifference < -180)
+                angleDifference = -1 * (360 - Math.Abs(angleDifference));
+            GameController.headingController.transform.Rotate(-Vector3.forward, angleDifference);
         }
 
         public override void UpdateOrientation() {
+            previousCameraAngle =  (int)GameController.camera.transform.eulerAngles.y;
             orientation = Input.gyro.attitude;
-            GameController.camera.transform.localRotation = Quaternion.Lerp(GameController.camera.transform.localRotation, new Quaternion(orientation.x * GameController.CAMERA_SPEED, orientation.y * GameController.CAMERA_SPEED, -orientation.z * GameController.CAMERA_SPEED, -orientation.w * GameController.CAMERA_SPEED), Time.deltaTime);
-            currentCameraAngle = 360 - (int)GameController.camera.transform.eulerAngles.y;
+            GameController.camera.transform.localRotation = Quaternion.Lerp(GameController.camera.transform.localRotation, new Quaternion(orientation.x, orientation.y, -orientation.z, -orientation.w), Time.deltaTime * 3);
+            currentCameraAngle = (int)GameController.camera.transform.eulerAngles.y;
+            UpdateHeading(null);
         }
     }
 }
