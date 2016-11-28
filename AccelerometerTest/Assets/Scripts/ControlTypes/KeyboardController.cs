@@ -25,7 +25,7 @@ namespace Assets.Own_Scripts
             }
         }
 
-        public override void UpdateHeading(string direction)
+        public override void UpdateHeading()
         {
             throw new NotImplementedException();
         }

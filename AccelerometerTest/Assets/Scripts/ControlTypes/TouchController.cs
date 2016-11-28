@@ -8,6 +8,8 @@ using UnityEngine;
 namespace Assets.Own_Scripts {
     class TouchController : AbstractController {
         private Touch initialTouch = new Touch();
+        private float tapTime = 0;
+        private bool hasSwiped = false;
 
         public TouchController() {
             gameController = GameObject.Find("GameController").GetComponent<GameController>();
@@ -24,37 +26,28 @@ namespace Assets.Own_Scripts {
         }
 
         public override void Move() {
-            if (!GameObject.Find("Footsteps").GetComponent<AudioSource>().isPlaying) {
-                GameObject.Find("Footsteps").GetComponent<AudioSource>().Play();
-                GameController.headingController.transform.position += new Vector3(GameController.headingController.transform.up.x, 0, GameController.headingController.transform.up.z) * GameController.MOVING_SPEED;
-            }
-        }
-
-        public override void UpdateHeading(string direction) {
-            foreach (Touch t in Input.touches) {
-                if (t.phase == TouchPhase.Began) {
-                    initialTouch = t;
-                } else if (t.phase == TouchPhase.Moved) {
-                    float deltaX = initialTouch.position.x - t.position.x;
-                    float deltaY = initialTouch.position.y - t.position.y;
-                    bool swipeSideways = Mathf.Abs(deltaX) > Mathf.Abs(deltaY);
-
-                    if (swipeSideways && deltaX > 0) {              // Swiped left 
-                        Debug.Log("You swiped left!");
-                    } else if (swipeSideways && deltaX <= 0) {      // Swiped right
-                        Debug.Log("You swiped right!");
-                    }
-                } else if (t.phase == TouchPhase.Ended) {
-                    initialTouch = new Touch();
+            if (!hasSwiped && Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Began) {
+                if (!GameObject.Find("Footsteps").GetComponent<AudioSource>().isPlaying) {
+                    GameObject.Find("Footsteps").GetComponent<AudioSource>().Play();
+                    GameController.headingController.transform.position += new Vector3(GameController.headingController.transform.up.x, 0, GameController.headingController.transform.up.z) * GameController.MOVING_SPEED;
                 }
             }
+        }
+        public override void UpdateHeading() {
+            if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Moved) {
+                Vector2 touchDelta = Input.GetTouch(0).deltaPosition;
+                GameController.headingController.transform.Rotate(0, 0, -touchDelta.x * 0.5f);
+                hasSwiped = true;
+            }
+            if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended)
+                hasSwiped = false;
         }
 
         public override void UpdateOrientation() {
             orientation = Input.gyro.attitude;
-            GameController.camera.transform.localRotation = Quaternion.Lerp(GameController.camera.transform.localRotation, new Quaternion(orientation.x * GameController.CAMERA_SPEED, orientation.y * GameController.CAMERA_SPEED, -orientation.z * GameController.CAMERA_SPEED, -orientation.w * GameController.CAMERA_SPEED), Time.deltaTime);
+            GameController.camera.transform.localRotation = Quaternion.Lerp(GameController.camera.transform.localRotation, new Quaternion(orientation.x, orientation.y, -orientation.z, -orientation.w), Time.deltaTime);
             currentCameraAngle = 360 - (int)GameController.camera.transform.eulerAngles.y;
-            UpdateHeading(null);
+            UpdateHeading();
         }
     }
 }

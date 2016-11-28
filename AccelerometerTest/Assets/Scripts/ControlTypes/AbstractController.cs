@@ -13,7 +13,7 @@ namespace Assets.Own_Scripts.ControlTypes {
         protected int currentCameraAngle;
 
         public abstract void Move();
-        public abstract void UpdateHeading(string direction);
+        public abstract void UpdateHeading();
         public abstract void UpdateOrientation();
     }
 }

@@ -32,7 +32,7 @@ namespace Assets.Own_Scripts {
             }
         }
 
-        public override void UpdateHeading(string direction) {
+        public override void UpdateHeading() {
             int angleDifference = currentCameraAngle - previousCameraAngle;
             if (angleDifference < -180)
                 angleDifference = -1 * (360 - Math.Abs(angleDifference));
@@ -44,7 +44,7 @@ namespace Assets.Own_Scripts {
             orientation = Input.gyro.attitude;
             GameController.camera.transform.localRotation = Quaternion.Lerp(GameController.camera.transform.localRotation, new Quaternion(orientation.x, orientation.y, -orientation.z, -orientation.w), Time.deltaTime * 3);
             currentCameraAngle = (int)GameController.camera.transform.eulerAngles.y;
-            UpdateHeading(null);
+            UpdateHeading();
         }
     }
 }
