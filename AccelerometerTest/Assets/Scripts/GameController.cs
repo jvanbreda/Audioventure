@@ -59,13 +59,13 @@ namespace Assets.Own_Scripts {
         }
 
         private void ShootHeadingRays() {
-            //orientationRay = new Ray(camera.transform.position, camera.transform.forward);
-            //Physics.Raycast(orientationRay, RAY_LENGTH);
-            //Debug.DrawRay(camera.transform.position, camera.transform.forward, Color.blue);
+            orientationRay = new Ray(camera.transform.position, camera.transform.forward);
+            Physics.Raycast(orientationRay, RAY_LENGTH);
+            Debug.DrawRay(camera.transform.position, camera.transform.forward, Color.blue);
 
-            //rightRay = new Ray(camera.transform.position, camera.transform.right);
-            //Physics.Raycast(rightRay, RAY_LENGTH);
-            //Debug.DrawRay(camera.transform.position, camera.transform.right, Color.blue);
+            rightRay = new Ray(camera.transform.position, camera.transform.right);
+            Physics.Raycast(rightRay, RAY_LENGTH);
+            Debug.DrawRay(camera.transform.position, camera.transform.right, Color.blue);
 
             headingRay = new Ray(headingController.transform.position, headingController.transform.up);
             Physics.Raycast(headingRay, RAY_LENGTH);

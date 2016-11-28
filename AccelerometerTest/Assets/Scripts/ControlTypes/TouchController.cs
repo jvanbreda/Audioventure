@@ -9,7 +9,9 @@ namespace Assets.Own_Scripts {
     class TouchController : AbstractController {
         private Touch initialTouch = new Touch();
         private float tapTime = 0;
-        private bool hasSwiped = false;
+        private bool isTapping = false;
+
+        private float xAxisDifference;
 
         public TouchController() {
             gameController = GameObject.Find("GameController").GetComponent<GameController>();
@@ -25,22 +27,40 @@ namespace Assets.Own_Scripts {
             Screen.sleepTimeout = SleepTimeout.NeverSleep;
         }
 
-        public override void Move() {
-            if (!hasSwiped && Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Began) {
-                if (!GameObject.Find("Footsteps").GetComponent<AudioSource>().isPlaying) {
-                    GameObject.Find("Footsteps").GetComponent<AudioSource>().Play();
-                    GameController.headingController.transform.position += new Vector3(GameController.headingController.transform.up.x, 0, GameController.headingController.transform.up.z) * GameController.MOVING_SPEED;
+        private void CheckScreenInteraction() {
+            if(Input.touchCount > 0) {
+                TouchPhase phase = Input.GetTouch(0).phase;
+                switch (phase) {
+                    case TouchPhase.Moved:
+                        xAxisDifference = Math.Max(Math.Abs(xAxisDifference), Math.Abs(Input.GetTouch(0).deltaPosition.x));
+                        UpdateHeading();
+                        break;
+                    case TouchPhase.Ended:
+                        isTapping = xAxisDifference < 0.35;
+                        xAxisDifference = 0;
+                        break;
+
                 }
             }
         }
+
+        public override void Move() {
+            CheckScreenInteraction();
+            Debug.Log(xAxisDifference);
+            if (isTapping) {
+                if (!GameObject.Find("Footsteps").GetComponent<AudioSource>().isPlaying) {
+                    GameObject.Find("Footsteps").GetComponent<AudioSource>().Play();
+                    GameController.headingController.transform.position += new Vector3(GameController.headingController.transform.up.x, 0, GameController.headingController.transform.up.z) * GameController.MOVING_SPEED;
+                    isTapping = false;
+                }
+            }
+        }
+
         public override void UpdateHeading() {
             if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Moved) {
                 Vector2 touchDelta = Input.GetTouch(0).deltaPosition;
-                GameController.headingController.transform.Rotate(0, 0, -touchDelta.x * 0.5f);
-                hasSwiped = true;
+                GameController.headingController.transform.Rotate(0, 0, -touchDelta.x * 0.6f);
             }
-            if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended)
-                hasSwiped = false;
         }
 
         public override void UpdateOrientation() {

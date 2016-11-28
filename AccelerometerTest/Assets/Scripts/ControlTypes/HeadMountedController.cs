@@ -33,10 +33,7 @@ namespace Assets.Own_Scripts {
         }
 
         public override void UpdateHeading() {
-            int angleDifference = currentCameraAngle - previousCameraAngle;
-            if (angleDifference < -180)
-                angleDifference = -1 * (360 - Math.Abs(angleDifference));
-            GameController.headingController.transform.Rotate(-Vector3.forward, angleDifference);
+            GameController.headingController.transform.Rotate(0, 0, -GameController.camera.transform.localRotation.y);
         }
 
         public override void UpdateOrientation() {
