@@ -8,10 +8,8 @@ using UnityEngine.SceneManagement;
 
 namespace Assets.Own_Scripts {
     public class GameController : MonoBehaviour {
-
-        //[SerializeField]
+        
         public SoundObject[] soundObjects;
-        //[SerializeField]
         public static Camera camera;
 
         public const float MOVING_SPEED = 10f;
@@ -36,18 +34,16 @@ namespace Assets.Own_Scripts {
         }
 
         void Update() {
-            if (SceneManager.GetActiveScene().name == "AccelerometerTest")
-            {
+            if (SceneManager.GetActiveScene().name == "AccelerometerTest") {
                 ShootRays();
                 controller.UpdateOrientation();
                 controller.Move();
             }
-            
+
         }
 
         void LateUpdate() {
-            if (SceneManager.GetActiveScene().name == "AccelerometerTest")
-            {
+            if (SceneManager.GetActiveScene().name == "AccelerometerTest") {
                 UpdateCurrentAudioSource();
                 UpdateAudioModel();
             }
@@ -77,13 +73,13 @@ namespace Assets.Own_Scripts {
                 playerRays[i] = new Ray(camera.transform.position, soundObjects[i].transform.position - camera.transform.position);
                 Physics.Raycast(playerRays[i], Vector3.Distance(soundObjects[i].transform.position, camera.transform.position));
                 Debug.DrawRay(camera.transform.position, soundObjects[i].transform.position - camera.transform.position, Color.red);
-            } 
+            }
         }
 
         private void UpdateCurrentAudioSource() {
             if (!soundObjects[counter].audioSource.enabled)
                 soundObjects[counter].audioSource.enabled = true;
-                
+
         }
 
         private void UpdateAudioModel() {
@@ -95,7 +91,7 @@ namespace Assets.Own_Scripts {
                 model.distance = Vector3.Distance(camera.transform.position, soundObjects[i].transform.position);
                 soundObjects[i].audioModel = model;
             }
-            
+
         }
     }
 }

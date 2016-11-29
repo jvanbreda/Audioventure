@@ -8,8 +8,6 @@ using UnityEngine;
 
 namespace Assets.Own_Scripts {
     class TouchController : AbstractHeadingController {
-        private Touch initialTouch = new Touch();
-        private float tapTime = 0;
         private bool isTapping = false;
 
         private float xAxisDifference;
