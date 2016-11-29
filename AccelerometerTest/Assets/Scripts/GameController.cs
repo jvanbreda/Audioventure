@@ -67,9 +67,9 @@ namespace Assets.Own_Scripts {
             Physics.Raycast(rightRay, RAY_LENGTH);
             Debug.DrawRay(camera.transform.position, camera.transform.right, Color.blue);
 
-            headingRay = new Ray(headingController.transform.position, headingController.transform.up);
+            headingRay = new Ray(headingController.transform.position, headingController.transform.forward);
             Physics.Raycast(headingRay, RAY_LENGTH);
-            Debug.DrawRay(headingController.transform.position, headingController.transform.up, Color.blue);
+            Debug.DrawRay(headingController.transform.position, headingController.transform.forward, Color.blue);
         }
 
         private void ShootSoundObjectRays() {

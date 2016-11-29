@@ -8,12 +8,11 @@ namespace Assets.Own_Scripts.ControlTypes {
     public abstract class AbstractController : ScriptableObject {
 
         protected GameController gameController;
-        public Quaternion orientation;
+        public Vector3 orientation;
         public Vector3 heading;
         protected int currentCameraAngle;
 
         public abstract void Move();
-        public abstract void UpdateHeading();
         public abstract void UpdateOrientation();
     }
 }

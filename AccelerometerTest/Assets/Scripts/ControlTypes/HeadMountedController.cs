@@ -32,16 +32,10 @@ namespace Assets.Own_Scripts {
             }
         }
 
-        public override void UpdateHeading() {
-            GameController.headingController.transform.Rotate(0, 0, -GameController.camera.transform.localRotation.y);
-        }
-
         public override void UpdateOrientation() {
-            previousCameraAngle =  (int)GameController.camera.transform.eulerAngles.y;
-            orientation = Input.gyro.attitude;
-            GameController.camera.transform.localRotation = Quaternion.Lerp(GameController.camera.transform.localRotation, new Quaternion(orientation.x, orientation.y, -orientation.z, -orientation.w), Time.deltaTime * 3);
+            orientation = Input.gyro.rotationRateUnbiased;
+            GameController.headingController.transform.Rotate(-orientation.x, -orientation.y, orientation.z);
             currentCameraAngle = (int)GameController.camera.transform.eulerAngles.y;
-            UpdateHeading();
         }
     }
 }

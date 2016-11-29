@@ -14,7 +14,5 @@ public class CameraController : MonoBehaviour {
         GameController.camera = GameObject.Find("HeadingController").GetComponentInChildren<Camera>();
         GameController.headingController = GameObject.Find("HeadingController");
         GameController.headingController.transform.rotation = GameController.camera.transform.localRotation;
-        GameObject.Find("HeadingController").transform.Rotate(Vector3.right, 90);
-
     }
 }

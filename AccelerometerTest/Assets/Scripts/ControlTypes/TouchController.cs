@@ -1,4 +1,5 @@
 ﻿using Assets.Own_Scripts.ControlTypes;
+using Assets.Scripts.ControlTypes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Text;
 using UnityEngine;
 
 namespace Assets.Own_Scripts {
-    class TouchController : AbstractController {
+    class TouchController : AbstractHeadingController {
         private Touch initialTouch = new Touch();
         private float tapTime = 0;
         private bool isTapping = false;
@@ -46,11 +47,10 @@ namespace Assets.Own_Scripts {
 
         public override void Move() {
             CheckScreenInteraction();
-            Debug.Log(xAxisDifference);
             if (isTapping) {
                 if (!GameObject.Find("Footsteps").GetComponent<AudioSource>().isPlaying) {
                     GameObject.Find("Footsteps").GetComponent<AudioSource>().Play();
-                    GameController.headingController.transform.position += new Vector3(GameController.headingController.transform.up.x, 0, GameController.headingController.transform.up.z) * GameController.MOVING_SPEED;
+                    GameController.headingController.transform.position += new Vector3(GameController.headingController.transform.forward.x, 0, GameController.headingController.transform.forward.z) * GameController.MOVING_SPEED;
                     isTapping = false;
                 }
             }
@@ -59,13 +59,13 @@ namespace Assets.Own_Scripts {
         public override void UpdateHeading() {
             if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Moved) {
                 Vector2 touchDelta = Input.GetTouch(0).deltaPosition;
-                GameController.headingController.transform.Rotate(0, 0, -touchDelta.x * 0.6f);
+                GameController.headingController.transform.Rotate(0, touchDelta.x * 0.6f, 0);
             }
         }
 
         public override void UpdateOrientation() {
-            orientation = Input.gyro.attitude;
-            GameController.camera.transform.localRotation = Quaternion.Lerp(GameController.camera.transform.localRotation, new Quaternion(orientation.x, orientation.y, -orientation.z, -orientation.w), Time.deltaTime);
+            orientation = Input.gyro.rotationRateUnbiased;
+            GameController.camera.transform.Rotate(-orientation.x, -orientation.y, orientation.z);
             currentCameraAngle = 360 - (int)GameController.camera.transform.eulerAngles.y;
             UpdateHeading();
         }
