@@ -3,11 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Assets {
-    public class SoundObject : MonoBehaviour {
+    public class DemoSoundObject : MonoBehaviour {
 
         [SerializeField]
         private int index;
@@ -22,14 +23,13 @@ namespace Assets {
 
         public AudioSource audioSource;
 
-        private GameController gameController;
+        private DemoGameController demoGameController;
 
 
         void Start() {
             audioSource = GetComponentInChildren<AudioSource>();
-            audioSource.enabled = false;
-            gameController = GameObject.Find("GameController").GetComponent<GameController>();
-            gameController.soundObjects[index] = this;
+            demoGameController = GameObject.Find("GameController").GetComponent<DemoGameController>();
+            demoGameController.soundObject = this;
         }
 
         void Update() {
@@ -37,7 +37,7 @@ namespace Assets {
         }
 
         void LateUpdate() {
-            CheckCollision();
+            //CheckCollision();
         }
 
         public void UpdateAudioSource() {
@@ -75,22 +75,24 @@ namespace Assets {
         private void UpdateReverb() {
             if (GameObject.Find("Toggle").GetComponent<Toggle>().isOn) {
                 float angleDifference = audioModel.angleDifference2D;
-                float newReverbZoneMix = Math.Min(1.03f, reverbBoost * (angleDifference / 180f));
+                float newReverbZoneMix = Math.Min(1.05f, reverbBoost * (angleDifference / 180f));
                 SetReverbZoneMix(newReverbZoneMix);
-            } else {
+            }
+            else {
                 SetReverbZoneMix(0);
             }
         }
+
         private void CheckCollision() {
-            if (audioModel.distance < 5 && gameController.counter == index) {
+            if (audioModel.distance < 5 && demoGameController.counter == index) {
                 GameObject.Find("PickupSound").GetComponent<AudioSource>().Play();
                 audioSource.enabled = false;
-                gameController.counter++;
+                demoGameController.counter++;
             }
 
-            if (gameController.counter > 4) {
+            if (demoGameController.counter > 4) {
                 GameObject.Find("EndSound").GetComponent<AudioSource>().Play();
-                gameController.counter = 0;
+                demoGameController.counter = 0;
             }
         }
 
